@@ -5,3 +5,7 @@ images
 myreqs.txt
 new_requirements.txt
 requirements.txt
+data
+celeba
+__pycache__
+pretrained_models

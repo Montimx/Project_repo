@@ -67,8 +67,8 @@ class Solver(object):
 
         # Build the model and tensorboard.
         self.build_model()
-        # if self.use_tensorboard:
-        #    self.build_tensorboard()
+        if self.use_tensorboard:
+            self.build_tensorboard()
 
     def build_model(self):
         """Create a generator and a discriminator."""
@@ -102,11 +102,11 @@ class Solver(object):
             num_params += p.numel()
         print(model)
         print(name)
-        print(("The number of parameters: {}".format(num_params)))
+        print("The number of parameters: {}".format(num_params))
 
     def restore_model(self, resume_iters):
         """Restore the trained generator and discriminator."""
-        print(('Loading the trained models from step {}...'.format(resume_iters)))
+        print('Loading the trained models from step {}...'.format(resume_iters))
         G_path = os.path.join(self.model_save_dir, '{}-G.ckpt'.format(resume_iters))
         D_path = os.path.join(self.model_save_dir, '{}-D.ckpt'.format(resume_iters))
         self.G.load_state_dict(torch.load(G_path, map_location=lambda storage, loc: storage))
@@ -336,12 +336,12 @@ class Solver(object):
                 et = time.time() - start_time
                 et = str(datetime.timedelta(seconds=et))[:-7]
                 log = "Elapsed [{}], Iteration [{}/{}]".format(et, i+1, self.num_iters)
-                for tag, value in list(loss.items()):
+                for tag, value in loss.items():
                     log += ", {}: {:.4f}".format(tag, value)
                 print(log)
 
                 if self.use_tensorboard:
-                    for tag, value in list(loss.items()):
+                    for tag, value in loss.items():
                         self.logger.scalar_summary(tag, value, i+1)
 
             # Translate fixed images for debugging.
@@ -354,7 +354,7 @@ class Solver(object):
                     x_concat = torch.cat(x_fake_list, dim=3)
                     sample_path = os.path.join(self.sample_dir, '{}-images.jpg'.format(i+1))
                     save_image(self.denorm(x_concat.data.cpu()), sample_path, nrow=1, padding=0)
-                    print(('Saved real and fake images into {}...'.format(sample_path)))
+                    print('Saved real and fake images into {}...'.format(sample_path))
 
             # Save model checkpoints.
             if (i+1) % self.model_save_step == 0:
@@ -362,14 +362,14 @@ class Solver(object):
                 D_path = os.path.join(self.model_save_dir, '{}-D.ckpt'.format(i+1))
                 torch.save(self.G.state_dict(), G_path)
                 torch.save(self.D.state_dict(), D_path)
-                print(('Saved model checkpoints into {}...'.format(self.model_save_dir)))
+                print('Saved model checkpoints into {}...'.format(self.model_save_dir))
 
             # Decay learning rates.
             if (i+1) % self.lr_update_step == 0 and (i+1) > (self.num_iters - self.num_iters_decay):
                 g_lr -= (self.g_lr / float(self.num_iters_decay))
                 d_lr -= (self.d_lr / float(self.num_iters_decay))
                 self.update_lr(g_lr, d_lr)
-                print(('Decayed learning rates, g_lr: {}, d_lr: {}.'.format(g_lr, d_lr)))
+                print ('Decayed learning rates, g_lr: {}, d_lr: {}.'.format(g_lr, d_lr))
 
 
     def test(self):
@@ -397,7 +397,7 @@ class Solver(object):
                 x_concat = torch.cat(x_fake_list, dim=3)
                 result_path = os.path.join(self.result_dir, '{}-images.jpg'.format(i+1))
                 save_image(self.denorm(x_concat.data.cpu()), result_path, nrow=1, padding=0)
-                print(('Saved real and fake images into {}...'.format(result_path)))
+                print('Saved real and fake images into {}...'.format(result_path))
 
 
 
@@ -460,4 +460,4 @@ class Solver(object):
                 x_concat = torch.cat(x_fake_list, dim=3)
                 result_path = os.path.join(self.result_dir, '{}-images.jpg'.format(i+1))
                 save_image(self.denorm(x_concat.data.cpu()), result_path, nrow=1, padding=0)
-                print(('Saved real and fake images into {}...'.format(result_path)))
+                print('Saved real and fake images into {}...'.format(result_path))

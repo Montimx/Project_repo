@@ -17,4 +17,4 @@ for i in range(len(imgs)):
 		cols = np.split(r, 5, axis=1)
 		preds.append(np.max( np.mean(cols[1], axis=-1) ))
 
-print((roc_auc_score(gts, preds)))
+print(roc_auc_score(gts, preds))
