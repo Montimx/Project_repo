@@ -50,7 +50,7 @@ class Solver(object):
         self.test_iters = config.test_iters
 
         # Miscellaneous.
-        self.use_tensorboard = config.use_tensorboard
+        #self.use_tensorboard = config.use_tensorboard
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
         # Directories.
@@ -67,7 +67,7 @@ class Solver(object):
 
         # Build the model and tensorboard.
         self.build_model()
-        # if self.use_tensorboard:
+        #if self.use_tensorboard:
         #    self.build_tensorboard()
 
     def build_model(self):
@@ -112,10 +112,10 @@ class Solver(object):
         self.G.load_state_dict(torch.load(G_path, map_location=lambda storage, loc: storage))
         self.D.load_state_dict(torch.load(D_path, map_location=lambda storage, loc: storage))
 
-    def build_tensorboard(self):
-        """Build a tensorboard logger."""
-        from logger import Logger
-        self.logger = Logger(self.log_dir)
+    #def build_tensorboard(self):
+    #   """Build a tensorboard logger."""
+    #    from logger import Logger
+    #    self.logger = Logger(self.log_dir)
 
     def update_lr(self, g_lr, d_lr):
         """Decay learning rates of the generator and discriminator."""
@@ -340,9 +340,9 @@ class Solver(object):
                     log += ", {}: {:.4f}".format(tag, value)
                 print(log)
 
-                if self.use_tensorboard:
-                    for tag, value in list(loss.items()):
-                        self.logger.scalar_summary(tag, value, i+1)
+                #if self.use_tensorboard:
+                #    for tag, value in list(loss.items()):
+                #        self.logger.scalar_summary(tag, value, i+1)
 
             # Translate fixed images for debugging.
             if (i+1) % self.sample_step == 0:
